@@ -9,29 +9,26 @@ import java.math.BigDecimal;
 @Table(name = "coffee")
 public class CoffeeModel {
 
-
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id_coffee;
     public String nome_coffee;
     public BigDecimal preco_coffee;
     public String desc_coffee;
-    @Lob
-    public byte[] image_coffee;
+    public String image_coffee;
 
     public  CoffeeModel(){
 
     }
 
-    public CoffeeModel(Integer id_coffee, String nome_coffee, BigDecimal preco_coffee, String desc_coffee, byte[] image_coffee) {
+    public CoffeeModel(Integer id_coffee, String nome_coffee, BigDecimal preco_coffee, String desc_coffee, String image_coffee) {
         this.id_coffee = id_coffee;
         this.nome_coffee = nome_coffee;
         this.preco_coffee = preco_coffee;
         this.desc_coffee = desc_coffee;
         this.image_coffee = image_coffee;
     }
+
     public Integer getId_coffee() {
         return id_coffee;
     }
@@ -64,12 +61,11 @@ public class CoffeeModel {
         this.desc_coffee = desc_coffee;
     }
 
-    public byte[] getImage_coffee() {
+    public String getImage_coffee() {
         return image_coffee;
     }
 
-    public void setImage_coffee(byte[] image_coffee) {
+    public void setImage_coffee(String image_coffee) {
         this.image_coffee = image_coffee;
     }
-
 }
