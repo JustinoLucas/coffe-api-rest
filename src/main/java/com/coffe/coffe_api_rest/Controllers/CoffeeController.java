@@ -115,32 +115,32 @@ public class CoffeeController {
 
 
 
-    @GetMapping("/{id_coffee}")
-    @CrossOrigin(origins = "http://localhost:5173")
-    public ResponseEntity<CoffeeModel> getById(@PathVariable Integer id_coffee) {
-        Optional<CoffeeModel> coffee = coffeeRepository.findById(id_coffee);
-        if (coffee.isPresent()){
-            String imageFileName = coffee.get().getImage_coffee();
-
-            try {
-                Path imagePath = Paths.get("uploads").resolve(imageFileName).normalize();
-                Files.deleteIfExists(imagePath);
-            } catch (IOException e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-            }
-            coffeeRepository.deleteById(id_coffee);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
     @DeleteMapping("/{id_coffee}")
     @CrossOrigin(origins = "http://localhost:5173")
     public ResponseEntity<Void> deleteById(@PathVariable Integer id_coffee) {
-        if (coffeeRepository.existsById(id_coffee)) {
+        System.out.println("Recebida requisição para excluir o café com ID: " + id_coffee);
+
+        Optional<CoffeeModel> coffee = coffeeRepository.findById(id_coffee);
+
+        if (coffee.isPresent()) {
+            // Excluir a imagem associada
+            String imageFileName = coffee.get().getImage_coffee();
+            try {
+                Path imagePath = Paths.get("uploads").resolve(imageFileName).normalize();
+                Files.deleteIfExists(imagePath); // Exclui a imagem, se existir
+                System.out.println("Imagem excluída com sucesso: " + imageFileName);
+            } catch (IOException e) {
+                System.out.println("Erro ao excluir a imagem: " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+
+            // Excluir o café do banco de dados
             coffeeRepository.deleteById(id_coffee);
+            System.out.println("Café excluído com sucesso!");
             return ResponseEntity.noContent().build();
         }
+
+        System.out.println("Café com ID " + id_coffee + " não encontrado.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
